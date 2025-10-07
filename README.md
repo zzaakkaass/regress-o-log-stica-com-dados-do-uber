@@ -1,111 +1,142 @@
-📊 Modelo de Classificação - Previsão de Corridas Uber
+🔍 Comparativo de Algoritmos de Machine Learning - Previsão de Corridas Uber
 🎯 Objetivo
-Implementar um modelo de Regressão Logística para prever se uma corrida do Uber será completada ou não, baseado em métricas de tempo de espera.
+Comparar o desempenho de três algoritmos de classificação diferentes na previsão de corridas completadas da Uber, analisando suas características e aplicabilidades.
 
-📋 Sobre o Projeto
-Este projeto representa minha evolução no aprendizado de Machine Learning com Python, aplicando conceitos de classificação binária em um dataset real da Uber. O foco está em entender como variáveis relacionadas ao tempo de espera impactam na conclusão das corridas.
+📊 Sobre o Projeto
+Este projeto realiza uma análise comparativa entre Regressão Logística, K-Nearest Neighbors (KNN) e Árvores de Decisão para entender qual algoritmo se adapta melhor aos padrões dos dados da Uber, considerando diferentes cenários e complexidades dos dados.
 
-🛠️ Tecnologias Utilizadas
-Python 3
+🧠 Algoritmos Comparados
+1. Regressão Logística
+```
+LogisticRegression(class_weight='balanced', solver='liblinear', random_state=42)
+Melhor para: Relações predominantemente lineares
+```
+Vantagens: Interpretabilidade, probabilidades bem calibradas
 
-Pandas - Manipulação de dados
+Limitações: Assume linearidade entre features e log-odds
 
-Scikit-learn - Machine Learning
+2. K-Nearest Neighbors (KNN)
+```
+KNeighborsClassifier(n_neighbors=5, weights='uniform')
+Melhor para: Padrões locais complexos
+```
+Vantagens: Não assume forma funcional específica, simples
 
-Matplotlib - Visualização
+Limitações: Computacionalmente intensivo, sensível a escala
 
-NumPy - Computação numérica
+3. Árvore de Decisão
+```
+DecisionTreeClassifier(max_depth=5, random_state=42)
+```
+Melhor para: Capturar regras específicas e não-lineares
+
+Vantagens: Interpretável, lida bem com features categóricas
+
+Limitações: Tendência a overfitting, instável
 
 📈 Features Utilizadas
-Avg VTAT - Tempo médio de espera do veículo
+Avg VTAT - Vehicle Turnaround Average Time
 
-Avg CTAT - Tempo médio de espera do cliente
+Avg CTAT - Customer Turnaround Average Time
 
-🔧 Implementação
-Pré-processamento
-python
-# Tratamento de valores nulos e conversão de tipos
-```
-df[feat1] = pd.to_numeric(df[feat1], errors='coerce')
-df[feat2] = pd.to_numeric(df[feat2], errors='coerce')
-```
-# Criação da variável target binária
-
-```
-df['target_completed'] = (df['Booking Status'].str.lower() == 'completed').astype(int)
+🛠️ Implementação
 Pipeline de Machine Learning
-python
+```
+# Pipeline padrão para todos os algoritmos
 pipe = Pipeline([
     ('scaler', StandardScaler()),
-    ('logreg', LogisticRegression(class_weight='balanced', 
-                                  solver='liblinear', 
-                                  random_state=42))
+    ('classifier', algoritmo_escolhido)
 ])
 ```
-📊 Métricas de Avaliação
-O modelo é avaliado usando múltiplas métricas:
+Métricas de Avaliação
+python
+```
+# Métricas calculadas para cada algoritmo
+metrics = {
+    'Accuracy': accuracy_score,
+    'Precision': precision_score,
+    'Recall': recall_score,
+    'F1-Score': f1_score,
+    'ROC AUC': roc_auc_score
+}
+```
+📊 Resultados e Análise
+Fronteira de Decisão
+A visualização da fronteira de decisão permite comparar como cada algoritmo separa as classes:
 
-Accuracy - Acurácia geral
+```
+# Visualização da fronteira de decisão
+plt.contourf(xx, yy, zz, levels=25, cmap='RdBu', alpha=0.6)
+plt.contour(xx, yy, zz, levels=[0.5], colors=['k'], linewidths=2)
+```
+Interpretação das fronteiras:
 
-Precision - Precisão nas previsões positivas
+Linha preta (0.5): Limite de decisão (50% probabilidade)
 
-Recall - Sensibilidade do modelo
+Região azul: Probabilidade baixa de "completado"
 
-F1-Score - Média harmônica entre precision e recall
+Região vermelha: Probabilidade alta de "completado"
 
-ROC AUC - Área sob a curva ROC
+🎯 Cenários de Aplicação
+✅ Regressão Logística
+Dados com relações lineares claras
 
-🎨 Visualização
-O projeto inclui uma visualização da fronteira de decisão que mostra:
+Quando interpretabilidade é crucial
 
-Linha preta (nível 0.5): Limite de decisão do modelo
+Dataset com muitas features
 
-Cores do fundo: Probabilidade de ser classe "completada"
+✅ KNN
+Padrões locais complexos
 
-Pontos azuis/vermelhos: Instâncias de treino e teste
+Datasets pequenos a médios
 
-📁 Estrutura do Código
-Carregamento e limpeza dos dados
+Quando a métrica de distância faz sentido
 
-Engenharia de features
+✅ Árvore de Decisão
+Regras de negócio específicas
 
-Divisão treino/teste estratificada
+Features categóricas
 
-Treinamento do modelo com pipeline
+Quando precisa de alta interpretabilidade
 
-Avaliação com múltiplas métricas
+📋 Estrutura do Projeto
+text
+comparativo_algoritmos/
+│
+├── dados_uber.csv
+├── comparativo_regressao_logistica.py
+├── comparativo_knn.py
+├── comparativo_arvore_decisao.py
+├── analise_comparativa_final.py
+└── README.md
+🔧 Como Executar
+bash
+# Instalar dependências
+pip install pandas numpy matplotlib scikit-learn
 
-Visualização da fronteira de decisão
+# Executar análise comparativa
+python analise_comparativa_final.py
+📊 Métricas de Comparação
+Algoritmo	Accuracy	Precision	Recall	F1-Score	ROC AUC
+Regressão Logística					
+KNN					
+Árvore de Decisão					
+🎓 Conclusões Aprendidas
+Não existe algoritmo universalmente melhor
 
-🎓 Conceitos Aplicados
-Classificação binária
+A escolha depende da natureza dos dados
 
-Balanceamento de classes
+A visualização ajuda a entender o comportamento dos modelos
 
-Padronização de features
-
-Validação estratificada
-
-Interpretação de probabilidades
-
-Análise de fronteira de decisão
-
-🔍 Insights do Modelo
-A fronteira de decisão permite visualizar:
-
-Como o modelo separa as classes baseado nas features
-
-Regiões de alta/baixa confiança nas previsões
-
-Potenciais melhorias com modelos mais complexos
+O balanceamento entre bias e variação é crucial
 
 🚀 Próximos Passos
-Testar outros algoritmos (KNN, Árvores de Decisão)
+Implementar Ensemble Methods (Random Forest, Gradient Boosting)
 
 Adicionar mais features ao modelo
 
-Realizar feature engineering mais avançado
+Realizar tuning de hiperparâmetros
 
 Implementar cross-validation
 
-Desenvolver API para previsões em tempo real
+Desenvolver dashboard interativo
